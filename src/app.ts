@@ -20,12 +20,6 @@ const main = async () => {
         console.clear();
         app.listen(port, () => {
           console.log(`Server listening, http://localhost:${port}/graphql`);
-          console.log(process.env.DATABASE_TYPE,
-            process.env.DATABASE_USERNAME,
-            process.env.DATABASE_PASSWORD,
-            process.env.DATABASE_NAME,
-            process.env.DATABASE_PROT,
-            process.env.DATABASE_HOST);
         });    
     } catch (error) {
         console.log(error);        
