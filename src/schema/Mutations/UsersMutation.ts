@@ -4,6 +4,7 @@ import { UserType } from "../typeDefs/UserType";
 import bcrypt from "bcryptjs";
 
 export const CREATE_USER = {
+
   type: UserType,
   args: {
     name: {type: GraphQLString},
@@ -13,16 +14,20 @@ export const CREATE_USER = {
   async resolve(parent: any, args: any){
     try {
       const {name, username, password} = args;
-      
+      const userExists = await Users.find({
+        where: {username}
+      });
+      if(userExists.length > 0) return {id: null, name: null, username: `Username already exists!`};
+
       const encryptedPassword = await bcrypt.hash(password, 10);
-      
-      const result = await Users.insert({
+
+      const newUser = await Users.insert({
         name,
         username,
         password: encryptedPassword,
       });
-      
-      return {id: result.identifiers[0].id, ...args};
+
+      return {id: newUser.identifiers[0].id, ...args};
     } catch (error) {
       console.log(error);
     }
